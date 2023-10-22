@@ -1,0 +1,45 @@
+1.Download and Extract Kafka:
+    wget wget https://downloads.apache.org/kafka/3.6.0/kafka_2.12-3.6.0.tgz
+    tar -xvf kafka_2.12-3.6.0.tgz
+----------------------------------------
+2. Check Java Version, Install Amazon Corretto 1.8, and Verify Installation:
+    java -version
+    sudo yum install java-1.8.0-amazon-corretto
+    java -version
+----------------------------------------
+3.Navigate to Kafka Directory:
+    cd kafka_2.12-3.6.0
+
+4.Start Zoo-keeper:
+    bin/zookeeper-server-start.sh config/zookeeper.properties
+----------------------------------------
+5.Open another window to start kafka
+6.But first ssh to to your ec2 machine as done above
+
+
+# In the new terminal window
+----------------------------------------
+    export KAFKA_HEAP_OPTS="-Xmx256M -Xms128M"
+    cd kafka_2.12-3.6.0
+    bin/kafka-server-start.sh config/server.properties
+
+    Note: If necessary, modify server.properties to listen on a public IP.
+        sudo nano config/server.properties
+            change ADVERTISED_LISTENERS to public ip of the EC2 instance
+
+
+----------------------------------------
+7. Create the topic:
+# In a new terminal window
+    cd kafka_2.12-3.6.0
+    bin/kafka-topics.sh --create --topic demo_test --bootstrap-server 54.85.169.160:9092 --replication-factor 1 --partitions 1
+
+----------------------------------------
+8.Start Producer:
+   bin/kafka-console-producer.sh --topic demo_test --bootstrap-server 54.85.169.160:9092
+----------------------------------------
+
+9.Start Consumer:
+# In a new terminal window
+    cd kafka_2.12-3.6.0
+    bin/kafka-console-consumer.sh --topic demo_test --bootstrap-server 54.85.169.160:9092
